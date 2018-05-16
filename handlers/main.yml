@@ -1,0 +1,5 @@
+- name: restart elasticsearch
+  docker_service:
+    project_src: /etc/opt/elasticsearch
+    state: present
+    restarted: yes

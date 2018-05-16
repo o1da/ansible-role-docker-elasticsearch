@@ -1,0 +1,31 @@
+- name: create directories
+  file:
+    path: '{{ item }}'
+    state: directory
+  with_items:
+  - /etc/opt/elasticsearch
+
+- name: check linux kernel configuration
+  sysctl:
+    name: vm.max_map_count
+    value: 262144
+    state: present
+    reload: yes
+
+- name: copy service specification
+  template:
+    src: docker-compose.yml
+    dest: /etc/opt/elasticsearch/docker-compose.yml
+  notify: restart elasticsearch
+
+- name: start ElasticSearch
+  docker_service:
+    project_src: /etc/opt/elasticsearch
+    state: present
+
+- name: Make sure Elasticsearch is running before proceeding.
+  wait_for:
+    host: {{ elasticsearch_network_host }}
+    port: {{ elasticsearch_http_port }}
+    delay: 3
+    timeout: 300

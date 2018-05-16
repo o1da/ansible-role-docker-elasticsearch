@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  elastic_search:
+    container_name: elastic_search
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:{{ elasticsearch_version }}
+    restart: always
+    networks:
+      - backend
+    ports: {{ elasticsearch_ports|to_json }}
+    environment:
+      - cluster.name={{ elasticsearch_cluster_name }}
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms{{ elasticsearch_mem }} -Xmx{{ elasticsearch_mem }}"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - esdata:/usr/share/elasticsearch/data
+
+networks:
+  backend:
+    external: True
+
+volumes:
+  esdata:
+    driver: local
