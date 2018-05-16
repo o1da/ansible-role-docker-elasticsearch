@@ -22,10 +22,3 @@
   docker_service:
     project_src: /etc/opt/elasticsearch
     state: present
-
-- name: Make sure Elasticsearch is running before proceeding.
-  wait_for:
-    host: {{ elasticsearch_network_host }}
-    port: {{ elasticsearch_http_port }}
-    delay: 3
-    timeout: 300
