@@ -1,6 +1,3 @@
 elasticsearch_version: 6.2.4
-elasticsearch_ports:
-- "9200:9200"
-- "9300:9300"
 elasticsearch_mem: 512m
 elasticsearch_cluster_name: docker-cluster

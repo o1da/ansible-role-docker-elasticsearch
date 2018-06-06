@@ -7,7 +7,12 @@ services:
     restart: always
     networks:
       - backend
+    expose:
+     - "9200"
+     - "9300"
+{% if elasticsearch_ports is defined %}
     ports: {{ elasticsearch_ports|to_json }}
+{% endif %}
     environment:
       - cluster.name={{ elasticsearch_cluster_name }}
       - bootstrap.memory_lock=true
